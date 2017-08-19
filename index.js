@@ -107,14 +107,20 @@ class SwipeAbleDrawer extends Component {
     }
   };
 
-  onDrawerAnimation() {
+  onDrawerAnimation(callback) {
     this.drawerAnimation.setValue(0);
     Animated.timing(this.drawerAnimation, {
       toValue: 1,
       duration: this.props.duration || 250,
       Easing: Easing.linear,
       useNativeDriver: true
-    }).start();
+    }).start(endState => {
+      if (endState.finished) {
+        if(callback) {
+          callback();
+        }
+      }
+    });
   }
 
   animationInterpolate() {
@@ -145,21 +151,21 @@ class SwipeAbleDrawer extends Component {
         };
   }
 
-  close = () => {
+  close = (callback) => {
     this.scale = this.props.scalingFactor;
     this.translateX = this.maxTranslateXValue;
     this.setState({ isOpen: false }, () => {
-      this.onDrawerAnimation();
+      this.onDrawerAnimation(callback);
       this.props.onClose && this.props.onClose();
     });
   };
 
-  open = () => {
+  open = (callback) => {
     this.scale = 1;
     this.translateX = 0;
     this.setState({ isOpen: true }, () => {
       this.props.onOpen && this.props.onOpen();
-      this.onDrawerAnimation();
+      this.onDrawerAnimation(callback);
     });
   };
 
