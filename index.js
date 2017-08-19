@@ -84,7 +84,7 @@ class SwipeAbleDrawer extends Component {
           opacity: this.opacity
         }
       });
-      Animated.event([null, { dx: this.drawerAnimation }]);
+      Animated.event([null, { dx: this.drawerAnimation }], { useNativeDriver: true });
     }
   };
 
@@ -112,7 +112,8 @@ class SwipeAbleDrawer extends Component {
     Animated.timing(this.drawerAnimation, {
       toValue: 1,
       duration: this.props.duration || 250,
-      Easing: Easing.linear
+      Easing: Easing.linear,
+      useNativeDriver: true
     }).start();
   }
 
